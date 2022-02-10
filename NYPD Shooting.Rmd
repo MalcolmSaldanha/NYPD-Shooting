@@ -1,0 +1,844 @@
+---
+title: "Final Project"
+output: html_notebook
+---
+<br>
+<ul>
+<li><b>TASKS:</b></li>
+<ul>
+<li>Introduction</li>
+<li>Data Cleaning</li>
+<li>EDA, Ridge, LASSO, Linear Regression(Model Comparison) for Chapter 1</li>
+<li>Conclusion</li>
+<li>References</li>
+<li>Reformatting of the document</li>
+<li>Data Integration of Chapter 1,2 and 3</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>TASKS:</b></li>
+<ul>
+<li>EDA - Chapter 2</li>
+<li>Linear Regression for Chapter 2</li>
+<li>Conclusion</li>
+</ul>
+</ul>
+
+<ul>
+<li><b>TASKS:</b></li>
+<ul>
+<li>EDA - Chapter 3</li>
+<li>Linear Regression for Chapter 3</li>
+<li>Conclusion</li>
+<li>References</li>
+</ul>
+</ul>
+</ul>
+
+
+<b><p style = "font-size: 20px; color: powderblue;background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">CHAPTERS</p></b>
+
+<ol>
+<i><li>How can we predict the jurisdiction where the victim will be targeted? Are these victims targeted based on their Race/Sex?</li></i>
+To reach a conclusion we first check whether these variables are significant enough to reach a particular result or not. If they are significant we can conclude/predict the values using Confusion Matrix. To answer this question we follow the given methods mentioned below:
+<ul>
+Method associated with this question includes:
+<ul>
+<li>Data Cleaning</li>
+<li>Summarizing the data</li>
+<li>Exploratory Data Analysis</li>
+<li>Ridge, LASSO, Linear Regression(Model Comparison)</li>
+<li>ANOVA</li>
+<li>Confusion Matrix</li>
+<li>ROC CURVE and AUC</li>
+</ul>
+</ul>
+
+<i><li>What are the factors that affect shooting? How do these factors affect?</li></i>
+<ul>
+Method associated with this question includes:
+<ul>
+<li>Data Cleaning</li>
+<li>Summarizing the data</li>
+<li>Exploratory Data Analysis</li>
+<li>Linear Regression</li>
+</ul>
+</ul>
+
+<i><li>How have victims’ races, age group and sex affected the occur time of shooting?</li></i>
+<ul>
+Method associated with this question includes:
+<ul>
+<li>Data Cleaning</li>
+<li>Summarizing the data</li>
+<li>Exploratory Data Analysis</li>
+<li>Linear Regression</li>
+</ul>
+</ul>
+
+
+</ol>
+
+
+<b><p style = "font-size: 20px; color:powderblue; background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">INTRODUCTION</p></b>
+
+The project is based on the NYPD_Shooting dataset. This dataset consists of  19 variables and 21,626 attributes for all those variables. This dataset is not a clean dataset, so to clean up the dataset we performed Data Cleaning. After cleaning of the data, we can say that the dataset is prepared to perform EDA and Modeling. The goal of this project would be to find out the outcomes of our research questions using various EDA and Modeling techniques. Also, to come up with a solution on how it will be beneficial for the NYPD to find the find how different factors are associated with each other.<br>
+The three questions/objectives which we want to achieve are:
+<ul>
+<li>How can we predict the jurisdiction where the victim will be targeted? Are these victims targeted based on their Race/Sex?</li>
+<li>What time does the shooting generally happen?</li>
+<li>How have victims’ races, age group and sex affected the occur time of shooting?</li>
+
+</ul>
+These are our goals which we are going to achieve using Exploratory Data Analysis and with the concept/techniques of Modeling/Machine Learning.
+<br>
+The techniques which we will be using for Exploratory Data Analysis will include:
+<ul>
+<li>Bar plots</li>
+<li>Scatter plots</li>
+<li>QQ Plots</li>
+<li>Frequency Polygon</li>
+</ul>
+These techniques will help in visualizing the results for various variables which will make it easier to answer the following questions. Through these visualization graphs it will give us a certain idea on how we can model the variables required. Also, it will help us apply the modeling techniques to those selected variables such as:
+<ul>
+<li>Linear Regression Model</li>
+<li>Ridge Regression Model</li>
+<li>LASSO Regression Model</li>
+<li>ANOVA (For Model Comparison)</li>
+</ul>
+And then comparing these models to find out the best model which is suitable/right whose results can be considered or which we can use for predicting the accurate value.
+
+<b><p style = "font-size: 20px; color:powderblue; background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">ANALYSIS</p></b>
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">CHAPTER 1</p></b>
+<ul>
+<li>The objective of Chapter 1 is to find out how the race/sex affects the different jurisdictions under NYPD.</li>
+<li>Since the selected variables are character variables first we will start with basic analyzation of character variables with numerical variable Jurisdiction. The shootings which are taking place, are they based on Victim's Race or Victim's Sex? </li>
+<li>So, we try to Predict the jurisdiction and whether the sex/race of the victim is associated with those jurisdictions.</li>
+<li>We will first perform Exploratory Data Analysis to Visualize these variables (Race and Sex) using barplots to find out the maximum number of people being targeted.</li>
+<li>Also, we visualize the Jurisdiction variable to find out which Jurisdiction is being targeted the most</li>
+<li>After performing Exploratory Data Analysis we will start with the modeling process to predict which Jurisdictions are going to be targeted, and whether these shootings are taking place based on Sex or the Race of the Victim</li>
+<li>We will be using 3 modeling techniques: Ridge, LASSO and Linear Regression Modeling</li>
+<li>After performing all 3 modeling techniques, we will grab the best model which gives us accurate results. For comparison we will be using ANOVA technique to find how Victims Race or Sex is associated in any way with the Jurisdiction</li>
+</ul>
+```{r, echo = FALSE}
+library(funModeling) 
+library(tidyverse) 
+library(Hmisc)
+library(ggplot2)
+library(RColorBrewer)
+library(caret)
+library(e1071)
+library(broom)
+library(glmnet)
+library(tibble)
+library(cvms)
+library(pROC)
+library(dplyr)
+library(readr)
+library(psych)
+library(dplyr)
+library(tidyr)
+library(fastDummies)
+library(lubridate)
+library(ggpubr)
+library(stringr)
+```
+<b>________________________________________________________________________________________________________________________________</b>
+<ul>
+<li> Inputting the dataset into an object "NYPD".</li>
+```{r}
+NYPD <- read.csv("NYPD_Shooting_Incident_Data__Historic_.csv")
+```
+
+<b><p style ="font-size: 20px;">Data Cleaning:</p></b>
+<li> Cleaning the dataset (Replacing the missing values with random value and Replacing "UNKNOWN" with some random value) :</li>
+<li>After glancing through the dataset we observed that there were some variables which had missing value or values like UNKNOWN which didnt make any sense. </li>
+<li>So to make sense out of our dataset we clean the dataset by replacing the missing and the "UNKNOWN" values with some random values which will be suitable for the dataset and similar to the values which exist in the same variable.</li>
+```{r}
+NYPD$PERP_RACE[is.na(NYPD$PERP_RACE)] <- "WHITE"
+NYPD$PERP_RACE[NYPD$PERP_RACE == ""] <- "WHITE"
+NYPD$PERP_RACE[NYPD$PERP_RACE == "UNKNOWN"] <- "BLACK"
+NYPD$VIC_RACE[NYPD$VIC_RACE == "UNKNOWN"] <- "ASIAN"
+NYPD$PERP_SEX[is.na(NYPD$PERP_SEX)] <- "F"
+NYPD$PERP_SEX[NYPD$PERP_SEX == "U"] <- "M/F"
+NYPD$VIC_SEX[NYPD$VIC_SEX == "U"] <- "M/F"
+NYPD$LOCATION_DESC[NYPD$LOCATION_DESC == ""] <- "F"
+NYPD$LOCATION_DESC[is.na(NYPD$LOCATION_DESC)] <- "PUBLIC PLACE"
+NYPD$PERP_AGE_GROUP[is.na(NYPD$PERP_AGE_GROUP)] <- "25-44"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "UNKNOWN"] <- "<18"
+NYPD$JURISDICTION_CODE[is.na(NYPD$JURISDICTION_CODE)] <- 2
+NYPD$VIC_AGE_GROUP[NYPD$VIC_AGE_GROUP == ""] <- "25-44"
+NYPD$VIC_AGE_GROUP[NYPD$VIC_AGE_GROUP == "UNKNOWN"] <- "<18"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "1020"] <- "25-44"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "224"] <- "25-44"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "940"] <- "25-44"
+NYPD1$VIC_SEX[NYPD1$VIC_SEX == "U"] <- "M/F"
+NYPD1$VIC_RACE[NYPD1$VIC_RACE == "UNKNOWN"] <- "ASIAN"
+NYPD1$VIC_AGE_GROUP[NYPD1$VIC_AGE_GROUP == ""] <- "25-44"
+NYPD1$VIC_AGE_GROUP[NYPD1$VIC_AGE_GROUP == "UNKNOWN"] <- "<18"
+```
+<b><p style ="font-size: 20px;">Summary:</p></b>
+```{r}
+summary(NYPD)
+```
+<b><p style ="font-size: 20px;">Glimpse of the Dataset:</p></b>
+```{r}
+glimpse(NYPD)
+```
+
+<b><p style ="font-size: 20px;">Data Modeling:</p></b>
+<li>Now that we found out that the number of males belonging to black race has the highest majority from our EDA, we will create a model based on the where the shooting takes place i.e., which jurisdiction? </li>
+```{r}
+trainIndex <- createDataPartition(NYPD$JURISDICTION_CODE, p=c(0.7,0.3), list = FALSE, times = 1)
+train_data_jur <- NYPD[trainIndex,]
+test_data_jur <- NYPD[-trainIndex,]
+```
+
+<li>There are two types of modeling we will be performing for this question i.e., Ridge and LASSO</li>
+<ol>
+<b><li>RIDGE Regression Model </li></b>
+<ul>
+```{r}
+x <- model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, NYPD)
+y <- NYPD$JURISDICTION_CODE
+```
+<li>Creating a fit object for the glmnet function to be used as lambda value</li>
+```{r}
+fit1 <- 10^seq(2, -2, by = -.1)
+```
+<li>Creating ridge regression model using glmnet function</li>
+```{r}
+ridge_reg_model <- glmnet(x, y, alpha = 0, lambda = fit1)
+summary(ridge_reg_model)
+```
+<li>Finding the lambda.min and the lambda.1se values and then gaining the best lambda value</li>
+```{r}
+fit_cv <- cv.glmnet(x,y, alpha = 0, lambda = fit1)
+lambda_min <- fit_cv$lambda.min
+lambda_1se <- fit_cv$lambda.1se
+paste0("The value of lambda.min is ",lambda_min)
+```
+
+```{r}
+paste0("The value of lambda.1se is ",lambda_1se)
+```
+<li>Plotting the fit model</li>
+```{r}
+plot(fit_cv,
+     xlab = "Lambda")
+abline(v=fit_cv$lambda.min, col = "orange", lty=1)
+abline(v=fit_cv$lambda.1se, col="cyan", lty=1)
+
+```
+<center><p> Plot 1: Lambda vs Mean-Squared Error of the data set(Group 9,2021).</p></center><br />
+<p><b>INTERPRETATION: </b><br>
+<li>The lowest point in the curve indicates the optimal lambda i.e., 0.05: the log value of lambda that best minimised the error in cross-validation also called as lambda.min.</li>
+<li>While lambda.1se is the value of λ that gives the value of the most regularized model i.e., 100</li>
+
+<li>Creating a Ridge Regression model and fitting it against a train model.
+Creating new x and y values for ridge regression model </li>
+```{r}
+x_1 <-  model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, train_data_jur)
+y_1 <- train_data_jur$JURISDICTION_CODE
+lambda_best <- fit_cv$lambda.min
+```
+<li>Ridge regression model using glmnet function and displaying the summary</li>
+```{r}
+ridge_reg_model_1 <- glmnet(x_1, y_1, alpha = 0, lambda = lambda_best)
+summary(ridge_reg_model_1)
+```
+<li>Coefficients of the Ridge Regression model </li>
+```{r}
+coef(ridge_reg_model_1)
+```
+<li>From this we can observe that the Intercept value i.e., the intercept(Jurisdiction) for Sex variable is shrunk to 0. Therefore we can not consider the estimate Jurisdiction for Victim's Sex. </li>
+<b>______________________________________________________________________________________________________________________</b>
+<li>Creating the best ridge model</li>
+```{r}
+ridge_best <- glmnet(x_1, y_1, alpha = 0, lambda = lambda_best)
+```
+<li>Creating newx object</li>
+```{r}
+x_vars_train <- model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, train_data_jur)
+```
+<li>Creating a prediction ridge for RMSE</li>
+```{r}
+pred_ridge <- predict(ridge_best, s = lambda_best, newx = x_vars_train)
+```
+<li>Calculating the Root Mean Square Error (RMSE)</li>
+```{r}
+rmse_1_train <- RMSE(pred_ridge, train_data_jur$JURISDICTION_CODE)
+rmse_1_train
+```
+<li>Setting up the data for the testing data</li>
+```{r}
+x_2 <-  model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, test_data_jur)
+y_2 <- test_data_jur$JURISDICTION_CODE
+```
+<b>______________________________________________________________________________________________________________________</b>
+<b>Getting the RMSE value for test set</b>
+<li>Creating the best ridge model for test</li>
+```{r}
+ridge_best_test <- glmnet(x_2, y_2, alpha = 0, lambda = lambda_best)
+```
+<li>Creating newx object</li>
+```{r}
+x_vars_test <- model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, test_data_jur)
+```
+<li>Creating a prediction ridge for RMSE</li>
+```{r}
+pred_ridge_test <- predict(ridge_best_test, s = lambda_best, newx = x_vars_test)
+```
+<li>Calculating the Root Mean Square Error (RMSE)</li>
+```{r}
+rmse_1_test <- RMSE(pred_ridge_test, test_data_jur$JURISDICTION_CODE)
+rmse_1_test
+```
+<b>INTERPRETATION: </b><br>
+<li>We can say that there wont be any feature selection for the model because, its expected of the ridge regression model where no variable has a coefficient of zero after taking all the variables into consideration. Since the coefficients of ridge regression were set to zero, but none of the value are zero.
+</li>
+<b>______________________________________________________________________________________________________________________</b>
+<li>Creating a DATAFRAME which includes both the train and test values</li>
+```{r}
+data.frame(RMSE_Train = rmse_1_train, RMSE_Test = rmse_1_test)
+```
+<li>RMSE value for train is 0.73 for ridge regression. So this value tells us that RMSE value for train is better than test set value because, smaller the value better the regression model. Since the model is doing much better on the train set rather than the test set, thus we can say that our model doesn't over-fit</li>
+<br>
+</ul>
+<b><li>LASSO Regression Model</li></b>
+<ul>
+<li>Creating a fit object using cv.glmnet function. Also, creating train fit and test fit for LASSO Regression</li>
+```{r}
+fit2 <- cv.glmnet(x,y, alpha = 1, lambda = fit1)
+best_lambda_lasso <- fit2$lambda.min
+
+fit_train_lasso <- glmnet(x_1, y_1, alpha =1, lambda = best_lambda_lasso)
+fit_test_lasso <- glmnet(x_2, y_2, alpha =1, lambda = best_lambda_lasso)
+
+# lambda.min value
+paste0("The value of lambda.min when alpha = 1 i.e., LASSO = ",fit2$lambda.min)
+```
+```{r}
+paste0("The value of lambda.1se when alpha = 1 i.e., LASSO = ",fit2$lambda.1se)
+```
+<li>Plotting Log vs Mean Squared Error Plot</li>
+```{r}
+plot(fit2)
+abline(v=fit2$lambda.min, col = "orange", lty=1)
+abline(v=fit2$lambda.1se, col="cyan", lty=1)
+```
+<center><p> Plot 2: Lambda vs Mean-Squared Error of Lasso Regression(Group 9,2021).</p></center><br />
+<p><b>INTERPRETATION: </b><br>
+<li>Since alpha = 1 we can say that its Lasso Regression. Other than that we can see that the value of lambda.min is 0.01 and lambda.1se is 100. Thus the function tells us that, the lambda.min value gives minimum mean cross-validated error of 0.01 and lambda.1se which gives the most regularized model such that the cross-validated error is within one standard error of the minimum i.e., 100 </li>
+
+<li>The lowest point in the curve indicates the optimal lambda i.e., 0.01: the log value of lambda that best minimised the error in cross-validation also called as lambda.min</li>
+
+<li>While lambda.1se is the value of λ that gives the value of the most regularized model i.e., 100</li>
+<br>
+<b>Summary of Lasso Train fit</b>
+```{r}
+lasso_train <- glmnet(x_1, y_1, alpha = 1, lambda = best_lambda_lasso)
+summary(lasso_train)
+```
+<b> Coefficients of LASSO Train fit </b>
+```{r}
+coef(lasso_train)
+```
+<b>INTERPRETATION</b>
+<li>From this figure we can see that Jurisdiction when compared to Victim's Sex are shrunk to zero, also Victim's race such as White Hispanic and Black Hispanic are shrunk to 0. It means that the shootings are unrelated to the Victim's Sex and Victim's Race like White Hispanic and Black Hispanic</li>
+<li>Similarly for Jurisdiction when compared to Victim's Race we can observe races like Black Hispanic, White Hispanic, Asian are shrunk to zero. Which tells us these are the lowest possible victims for shooting. For races White and Asian/Pacific Islander the shooting rates are less than zero, which means that they are not likely to be targeted at all.</li>
+<li>For the Black Race we can observe there is a positive value which means it is highly possible for that the next Victim would belong to Black race, at any of those Jurisdictions</li>
+<br>
+<b>______________________________________________________________________________________________________________________</b>
+<li>Calculating the RMSE for the training model for LASSO </li>
+```{r}
+# Creating the best lasso model
+lasso_best <- glmnet(x_1, y_1, alpha = 1, lambda = best_lambda_lasso)
+
+# Creating newx object
+x_vars_train_l <- model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, train_data_jur)
+
+# Creating a prediction lasso for RMSE
+pred_lasso <- predict(lasso_best, s = best_lambda_lasso, newx = x_vars_train_l)
+
+# Calculating the Root Mean Square Error (RMSE)
+rmse_lasso_train <- RMSE(pred_lasso, train_data_jur$JURISDICTION_CODE)
+rmse_lasso_train
+```
+<li>Calculating the RMSE for the testing model for LASSO </li>
+```{r}
+# Creating the best lasso model for test
+lasso_best_test <- glmnet(x_2, y_2, alpha = 1, lambda = best_lambda_lasso)
+
+# Creating newx object
+x_vars_test_l <- model.matrix(JURISDICTION_CODE ~ VIC_RACE + VIC_SEX, test_data_jur)
+
+# Creating a prediction lasso for RMSE
+pred_lasso_test <- predict(lasso_best_test, s = best_lambda_lasso, newx = x_vars_test_l)
+
+# Calculating the Root Mean Square Error (RMSE)
+rmse_lasso_test <- RMSE(pred_lasso_test, test_data_jur$JURISDICTION_CODE)
+rmse_lasso_test
+```
+<li>Creating a data frame to interpret the following results</li>
+```{r}
+data.frame(RMSE_Train = rmse_lasso_train, RMSE_Test = rmse_lasso_test)
+```
+<b>INTERPRETATION:</b>
+<li>RMSE value for train is 0.734 i.e. 73.4% variance for lasso regression and, the value for lasso's test model is 0.739 i.e. 73.9% variance. So this tells us that RMSE value for train is better than test set value. Since the model is doing much better on the train set rather than the test set we can say that our model doesn't over-fit</li>
+<br>
+<li> Creating a dataframe which consists of both Ridge train/test values and LASSO train/test values</li>
+<ul>
+<li> Row 1 : Ridge </li>
+<li> Row 2 : LASSO </li>
+</ul>
+```{r}
+data.frame(RMSE_Train = c(rmse_1_train, rmse_lasso_train),
+           RMSE_Test= c(rmse_1_test, rmse_lasso_test))
+```
+<b>INTERPRETATION:</b>
+<li>From this dataframe we can say that Train fit of RIDGE model is the best fit for the 3 variables i.e. VIC_RACE, VIC_SEX and JURISDICTION_CODE </li>
+<br>
+</ul>
+
+<b><li> MODEL COMPARISON using ANOVA (Linear Regression Model) </li></b>
+<br>
+<b>HYPOTHESIS TESTING:</b>
+<ul>
+<li>H0: Jurisdiction is not based on Race of the Victim</li>
+<li>H1: Jurisdiction is based on Race of the Victim</li>
+</ul>
+<ul>
+```{r}
+FIT_1 <- lm(formula = JURISDICTION_CODE ~ VIC_RACE, data = NYPD)
+anova(FIT_1)
+```
+<b>INTERPRETATION</b>
+<li>In the output below, since the <u>p-value is less than 0.05</u> we can reject the null hypothesis.</li>
+<br>
+<b>HYPOTHESIS TESTING:</b>
+<ul>
+<li>H0: Jurisdiction is not based on Sex of the Victim</li>
+<li>H1: Jurisdiction is based on Sex of the Victim</li>
+</ul>
+<ul>
+```{r}
+FIT_2 <- lm(formula = JURISDICTION_CODE ~ VIC_SEX, data = NYPD)
+anova(FIT_2)
+```
+<b>INTERPRETATION</b>
+<li>In the output below, since the p-value of 0.9989 is <u>GREATER</u> than 0.05 we failed to reject the null hypothesis</li>
+<br>
+<li>Calculating AIC and BIC for both models i.e., FIT_1 and FIT_2</li>
+```{r}
+AIC(FIT_1, FIT_2)
+```
+<b>INTERPRETATION: </b><br>
+<li>Lower AIC means a better fit model. Therefore from these results we can conclude that FIT_1 is a better model compared to FIT_2</li>
+```{r}
+BIC(FIT_1, FIT_2)
+```
+<b>INTERPRETATION: </b><br>
+<li>Similarly, For BIC we can say that FIT_1 is a better model compared to FIT_2</li>
+</ul><br>
+<b>______________________________________________________________________________________________________________________</b>
+Since we know from the above modeling that VIC_RACE and VIC_SEX are non-significant to JURISDICTION. Therefore, the Jurisdiction cannot be accurately predicted based on these variables. But if they were significant we would follow the steps below to predict which Jurisdiction would be targeted.
+<br>
+
+<b><li> Prediction of JURISDICTION </li></b>
+<ul>
+For Prediction we will be working on both the training and testing data to find out the number of shootings to take place in a Jurisdiction. Since, we already found out the Black Race is being targeted. Now we will predict the Jurisdiction.
+<b>________________________________________________________________________________________________________________</b>
+<b><li> TRAINING DATA </li></b>
+```{r}
+# Converting the JURISDICTION_CODE variable into factor variable
+train_data_jur$JURISDICTION_CODE <- as.factor(train_data_jur$JURISDICTION_CODE)
+# Using glm() function for fitting the logistic regression model
+fit_final_1 <- glm(formula = JURISDICTION_CODE ~ VIC_RACE, data = train_data_jur, family = "binomial")
+# Summary
+summary(fit_final_1)
+```
+<b>INTERPRETATION</b>
+<li>We see that all the Victim's Races influence the Jurisdiction positively, while the Victim's Sex has a negative effect. We also observe the coefficient of Victim's Race and Victim's Sex are non-significant, since p > 0.05</li>
+<li>We also observe that the Residual Deviance has been reduced by 138 with a loss of 6 degree of freedom</li>
+<li>The Fisher Scoring Algorithm required 11 iterations to perform the fit </li>
+<br>
+<b>________________________________________________________________________________________________________________</b>
+<b><li>TESTING DATA </li></b>
+```{r}
+# Converting the JURISDICTION_CODE variable into factor variable
+test_data_jur$JURISDICTION_CODE<- as.factor(test_data_jur$JURISDICTION_CODE)
+# Using glm() function for fitting the logistic regression model
+fit_final_2 <- glm(formula = JURISDICTION_CODE ~ VIC_RACE, data = test_data_jur, family = "binomial")
+summary(fit_final_2)
+```
+<b>INTERPRETATION</b>
+<li>We see that all the Victim's Races and Victim's Sex influence the Jurisdiction positively. We also observe the coefficient of Victim's Race and Victim's Sex are non-significant, since p > 0.05</li>
+<li>We also observe that the Residual Deviance has been reduced by 32.6 with a loss of 6 degree of freedom</li>
+<li>The Fisher Scoring Algorithm required 11 iterations to perform the fit </li>
+<br>
+<b>________________________________________________________________________________________________________________</b>
+<li>Predicting JURISDICTION using training data and with the help of confusionMatrix function</li>
+```{r}
+confusionMatrix(train_data_jur$JURISDICTION_CODE, sample(train_data_jur$JURISDICTION_CODE))
+```
+<b>INTERPRETATION</b>
+<li>From this confusion Matrix, by observing the first row - the model predicted that 10,574 shootings to be taken place in Jurisdiction 0 which was correctly predicted, 29 of them were incorrectly predicted in Jurisdiction 0 meant to be in Jurisdiction 1 and 2054 incorrectly predicted in Jurisdiction 0 which were meant to be in Jurisdiction 2</li>
+
+<li>Similarly observing column 1 (Jurisdiction:0), out of the 12,657 shootings taking place predicted by model (Summation of Jurisdiction:0 column), 10574 were the actual shootings taking place in Jurisdiction:0. While 30 shootings were incorrectly predicted to be in Jurisdiction:0, and 2053 shootings were incorrectly predicted to be in Jurisdiction:0</li>
+
+<li>Accuracy of this model is 0.7241 (72%) which will give us a 95% CI between 0.7169(71%) and 0.7312(73%)</li>
+<br>
+<b>________________________________________________________________________________________________________________</b>
+<li>Predicting JURISDICTION using testing data</li>
+```{r}
+confusionMatrix(test_data_jur$JURISDICTION_CODE, sample(test_data_jur$JURISDICTION_CODE))
+```
+<b>INTERPRETATION</b>
+<li>From this confusion Matrix, by observing the first row - the model predicted that 4505 shootings to be taken place in Jurisdiction 0 which was correctly predicted, 10 of them were incorrectly predicted in Jurisdiction 0 meant to be in Jurisdiction 1 and 892 incorrectly predicted in Jurisdiction 0 which were meant to be in Jurisdiction 2</li>
+
+<li>Similarly observing column 1 (Jurisdiction:0), out of the 5407 shootings taking place predicted by model (Summation of Jurisdiction:0 column), 4505 were the actual shootings taking place in Jurisdiction:0. While 14 shootings were incorrectly predicted to be in Jurisdiction:0, and 888 shootings were also incorrectly predicted to be in Jurisdiction:0</li>
+
+<li>Accuracy of this model is 0.721 (72%) which will give us a 95% CI between 0.7099(70%) and 0.7319(73%)</li>
+<br>
+<li> Since, Test fit gives a much better accuracy than the Train fit, we could've only worked on the Test Fit. Confusion Matrix was done for both Train and Test to compare their accuracy and which one gives better results </li>
+<br>
+<b>________________________________________________________________________________________________________________</b>
+<li>Plotting ROC Curve for Training Data</li>
+```{r}
+train_data_jur$prediction <- predict(fit_final_1,train_data_jur, type="response")
+
+res.roc <- roc(train_data_jur$JURISDICTION_CODE, train_data_jur$prediction)
+auc <- round(auc(train_data_jur$JURISDICTION_CODE, train_data_jur$prediction),4)
+paste0("The value of AUC for train data  = ", auc)
+```
+```{r}
+ggroc(res.roc, colour = 'lightgreen', size = 2) +
+  ggtitle(paste0('ROC Curve ', '(AUC = ', auc, ')')) +
+  theme_minimal()
+```
+<center><p> Plot 3: ROC Curve for train data(Group 9,2021).</p></center><br />
+<b>INTERPRETATION:</b><br>
+The ROC curve shows the relationship between Sensitivity and Specificity for every possible cut-off.
+<br>
+<ul>
+<li>The x-axis shows 1 - specificity which is equal to false positive fraction = FP/(FP+TN)</li>
+<li>The y-axis shows sensitivity which is equal to true positive fraction = TP/(TP+FN)</li>
+<li>So by using the roc function we create the ROC curve for the JURISDICTION_CODE variable from the trained model vs Prediction variable from the trained model and then using the auc function we get the value of AUC for trained model as 0.6041</li>
+</ul>
+<br>
+<li>Plotting ROC Curve for Testing Data</li>
+```{r, echo=FALSE}
+test_data_jur$prediction <- predict(fit_final_2,test_data_jur, type="response")
+
+res.roc1 <- roc(test_data_jur$JURISDICTION_CODE, test_data_jur$prediction)
+auc1 <- round(auc(test_data_jur$JURISDICTION_CODE, test_data_jur$prediction),4)
+paste0("The value of AUC for train data (caret_data) = ", auc1)
+```
+
+```{r}
+ggroc(res.roc1, colour = 'lightblue', size = 2) +
+  ggtitle(paste0('ROC Curve ', '(AUC = ', auc1, ')')) +
+  theme_minimal()
+```
+<center><p> Plot 4: ROC Curve for test data(Group 9,2021).</p></center><br />
+<b>INTERPRETATION:</b><br>
+The ROC curve shows the relationship between Sensitivity and Specificity for every possible cut-off.
+<br>
+<ul>
+<li>So by using the roc function we create the ROC curve for the JURISDICTION_CODE variable from the test model vs Prediction variable from the test model and then using the auc function we get the value of AUC for trained model as 0.5075</li>
+</ul>
+<br>
+</ul>
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">CHAPTER 2</p></b>
+
+What are the factors that affect shooting? How do these factors affect?
+
+We try to find clues about shooting crimes from criminal age and criminal motives to provide practical suggestions for reducing shooting incidents and protecting personal safety through statistical analysis methods.
+
+Factors that affect shooting time (gender, age and PRECINCT)
+
+First, build dummy variable for gender and age variable
+```{r}
+NYPD$age1 <- ifelse(NYPD$PERP_AGE_GROUP=="<18"|NYPD$PERP_AGE_GROUP=="18-24",1,0)#if age <= 24, age1=1, else age1=0
+NYPD$age2 <- ifelse(NYPD$PERP_AGE_GROUP=="25-44",1,0)# if 24<age<=44, age2=1, else age2=0
+NYPD$age3 <- ifelse(NYPD$PERP_AGE_GROUP=="45-64"|NYPD$PERP_AGE_GROUP=="65+",1,0)# if age >44, age3 =1, else age3=0
+
+NYPD$sex1 <- ifelse(NYPD$PERP_SEX=="F",1,0)#gener=female, sex1=1 else sex1=0
+NYPD$sex2 <- ifelse(NYPD$PERP_SEX=="M",1,0)#gener=male, sex2=1 else sex2=0
+```
+Then, build a linear model, hour variable as dependent variable, age, sex, and PRECINCT variables as independent variables.
+```{r}
+NYPD$hours <- as.numeric(as.character(NYPD$hours))
+fit.lm <- lm(hours~age1+age2+age3+sex1+sex2+PRECINCT,data = NYPD)
+summary(fit.lm)
+```
+From the modeling results, age1 (age<=24), age2(age>=45), and PRECICT variables are related to shooting time. When age<=24, the average time of shooting time will be delayed by 1.29h. When age>=45, the average time of shooting time will be delayed by 2.26h. There is no significant relationship between shooting time and gender. In addition, there is a negative correlation between PRECINCT and shooting time. Each additional unit of PRECINCT will advance the shooting time by 0.007h.
+
+Test the validity of the model
+```{r}
+plot(fit.lm)
+```
+<center><p> Plot 5: Plotting Model(Group 9,2021).</p></center><br />
+From the distribution results of the fitted values and residuals, it can be seen that the residuals mainly fluctuate up and down on the axis centered at 0, but according to the residual Q-Q graph, it can be found that the residuals slightly deviate from the normal distribution, because most predictors are 01 (Logical) variables are related.
+
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">CHAPTER 3</p></b>
+
+How have victims’ races, age group and sex affected the occur time of shooting?
+
+We created a linear regression model based on the hypothesis. <br>
+<b>Hypothesis Testing</b>
+<ul>
+<li>Ho: There is no linear relationship between the occur time of shooting and victims’ races, age group and sex</li>
+<li>Ha: There is a linear relationship between the occur time of shooting and victims’ races, age group and sex</li>
+</ul>
+```{r}
+model_q1=lm(NYPD1$OCCUR_HOUR ~ 
+              NYPD_1$`VIC_AGE_GROUP_65+` +
+              NYPD_1$`VIC_AGE_GROUP_45-64`+
+              NYPD_1$`VIC_AGE_GROUP_25-44`+
+              NYPD_1$`VIC_AGE_GROUP_18-24`+
+              NYPD_1$`VIC_AGE_GROUP_<18`+
+              
+              NYPD_1$VIC_SEX_M+
+              NYPD_1$VIC_SEX_F
+            )
+plot(model_q1)
+```
+<center><p> Plot 6: Plotting Model(Group 9,2021).</p></center><br />
+<ul>
+<li>To check assumptions of linear regression, we can check these plots</li>
+<li>According to Residuals vs Fitted. plot, we have the red line that approximately horizontal at zero. It means we can assume linear relationship between the predictors and the outcome variables</li>
+<li>According to scale-location plot, we have a nearly horizontal line with equally spread points. This means the homogeneity of variance meets for our model</li>
+<li>According to the normal Q-Q plot, our plot does not follow a straight line.Since we use dummy variable here, and a binary variable cannot be normal.But we can still use linear regression as our model in this situation</li>
+<br>
+According to the EDA, linear regression is suitable to use in question 3.
+```{r}
+summary(model_q1)
+```
+According to the result, only age group 18-24 and age group 25-44 has small p-value, which means they are not statistically significant. It means our model shows  these two age groups contribute more than other variables to occur time of shooting.
+
+
+<b><p style = "font-size: 20px; color:powderblue; background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">CONCLUSION/INTERPRETATION</p></b>
+<ul>
+<li>In conclusion to our first research question, from the above models we observe that the variables VIC_SEX and VIC_RACE are non-significant to JURISDICTION_CODE. Therefore, we cannot accurately predict the Jurisdiction we want based on these variables. But if they were significant we can go through with the process further by making Confusion Matrix of JURISDICTION_CODE and the variable which has P-value < 0.05 i.e. in this case would be VIC_RACE. </li>
+<li>Thus, if we were to go through with the process of predicting the Jurisdiction and whether these victims were attacked based on their Sex or Race, we would reach a different conclusion mentioned below: </li>
+<ul>
+<li>From these model predictions we can say that testing model gives accurate results of Jurisdiction. Also, it tells us that the shootings are taking place based on RACE (Black) at (0: Patrol) Jurisdiction</li>
+<li>These models helped us predicting when and where the shootings might take place and how the citizens are targeted whether they are targeted based on Race or whether they are targeted based on Sex</li>
+</ul>
+<b>____________________________________________________________________________________________________</b>
+<li>In conclusion to our second research question we can say that, Most shootings occur at night. So, personal protection needs to be strengthened at night</li>
+<li>The perpetrators of shootings are mostly young and middle-aged men, so strengthening the psychological counseling of men before can help reduce the incidence of shootings</li>
+<li>Age1 (age<=24), age2(age>=45), and PRECINCT variables are related to shooting time</li>
+<b>____________________________________________________________________________________________________</b>
+<li>In conclusion, to answer our third research question: How have victims’ races, age group and sex affected the occur time of shooting?</li>
+<li>Victims' races and sex are not statistical significant to affect the occur time of shooting </li>
+<li>When victims are age group between 18-24 years old, the occur time of shooting will be 2.08070 hours earlier compare to age group 65+ </li>
+<li>When victims are age group between 25-44 years old, the occur time of shooting will be 2.36170 hours earlier compare to age group 65+ </li> 
+<li>When victims are in other age groups, it is not statistical significant to affect the occur time of shooting </li>
+</ul>
+
+
+<b><p style = "font-size: 20px; color:powderblue; background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">REFERENCES</p></b>
+<ul>
+<li>A. (2021, April 21). Training Data: What Is It? All About Machine Learning Training Data. Appen. https://appen.com/blog/training-data/ Retrieved on May 16th, 2021</li>
+<li>RPubs - Practice_3. (2019, October 4). R Programming. https://rpubs.com/danaecarrerasgarcia/535667 Retrieved on May 16th, 2021</li>
+<li>https://stats.idre.ucla.edu/r/modules/coding-for-categorical-variables-in-regression-models/ Retrieved on May 16th, 2021</li>
+<li>CalculatorSoup, L. (n.d.). Decimal to time calculator. Retrieved May 16, 2021, from https://www.calculatorsoup.com/calculators/time/decimal-to-time-calculator.php </li>
+<li>Trochim, W. M. (n.d.). Dummy variables. Retrieved May 16, 2021, from https://conjointly.com/kb/dummy-variables/</li>
+</ul>
+
+<b><p style = "font-size: 20px; color:powderblue; background-color: grey; border-style: solid; border-color: black; padding: 10px; text-align: center;">APPENDIX</p></b>
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">Exploratory Data Analysis: Chapter 1</p></b>
+
+<b><p style ="font-size: 20px;">Dataframe and Barplots for Victim's Race, Sex and Jurisdiction Code:</p></b>
+<ol>
+<b><li><u>Victim's race</u></li></b>
+<ul>
+<li>We use the freq function for analysis of the victims race. With the help of freq function we get the dataframe which consists of frequency, percentage of each race and a cumulative frequency is calculated of all those races</li>
+```{r, echo = FALSE}
+freq(NYPD$VIC_RACE)
+```
+<center><p> Plot 7: Freq Plot of Victim's Race(Group 9,2021).</p></center><br />
+<li>From the following Frequency/Percentage Figure of Victim's race we can observe that the highest percentage amongst all the races, black people holds the majority in being the victims during the shootings</li>
+</ul>
+<b><li><u>Victim's Sex</u></li></b>
+<ul>
+<li>Similary, for Victim's Sex we perform the same operation using the freq function</li>
+```{r, echo = FALSE}
+freq(NYPD$VIC_SEX)
+```
+<center><p> Plot 8: Freq Plot of Victim's Sex(Group 9,2021).</p></center><br />
+<li>From the following Frequency/Percentage Figure of Victim's sex we can observe that the highest percentage of victims are Males during the shootings</li>
+</ul>
+<b><li><u>Jurisdiction Code (where the shooting occurred)</u></li></b>
+```{r}
+freq(NYPD$JURISDICTION_CODE)
+```
+<center><p> Plot 9: Freq Plot of Jurisdiction Code variable(Group 9,2021).</p></center><br />
+<ul>
+<li>Jurisdiction represents where the shooting occurred i.e., Jurisdiction is represented by 0,1, and 2 where 0: Patrol, 1: Transit and 2: Housing. From this by analysing the jurisdiction code we can conclude that the highest number of shootings took place during Patrol</li>
+<li>After analyzing all 3 variables we move on to the original question whether these shootings were based on race or sex of the victim. For this create a ggplot which combines all 3 variables and based on that we can create a visualization of these 3 variables</li>
+</ul>
+</ol>
+```{r}
+p <- ggplot(NYPD, aes(JURISDICTION_CODE, VIC_RACE, color = VIC_SEX))+
+  labs(fill = "SEX OF THE VICTIM")+
+  geom_bar(stat = "identity", fill = "white")+
+  theme_minimal()+
+  xlab("Jurisdiction")+
+  ylab("Victims Race")
+p
+```
+<center><p> Plot 10: Barplot of Jurisdiction and Victim's Race with color fill of Victim's Sex(Group 9,2021).</p></center><br />
+<li>From this barplot analysis when taken all 3 variables together we can conclude that the shootings takes place on victims who are black males</li>
+</ul>
+```{r}
+ggplot(data = NYPD, mapping = aes(x = JURISDICTION_CODE, colour = VIC_RACE)) +
+  geom_freqpoly()+
+  theme_bw()+
+  xlab("Jurisdiction")+
+  ylab("Victim's Race")
+```
+<center><p> Plot 11: Freq Polygon of Victim's Race associated with Jurisdiction Code(Group 9,2021).</p></center><br />
+From this Frequency Polygon we have taken one numeric variable i.e., JURISDICTION_CODE and for color we took the variable VIC_RACE to find out which race are the most targeted. We reached the conclusion that Race "BLACK" is the most targeted in Jurisdiction 0.
+```{r}
+ggplot(data = NYPD, mapping = aes(x = JURISDICTION_CODE, colour = VIC_SEX)) +
+  geom_freqpoly()+
+  theme_bw()+
+  xlab("Jurisdiction")+
+  ylab("Victim's Sex")
+```
+<center><p> Plot 12: Freq Polygon of Victim's Sex associated with Jurisdiction Code(Group 9,2021).</p></center><br />
+From this Frequency Polygon we have taken one numeric variable i.e., JURISDICTION_CODE and for color we took the variable VIC_SEX to find out which race are the most targeted. We reached the conclusion that Sex "MALE" is the most targeted in Jurisdiction 0.
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">Exploratory Data Analysis: Chapter 2</p></b>
+
+In response to the research question, we made 2 part analysis using EDA.
+
+1. The time when the shooting generally occurred.
+
+First, I split the OCCUR_TIME variable, extract the hour string, and then convert it into a numeric variable. Then count and visualize according to the hours variable.
+```{r}
+str(NYPD)
+```
+```{r}
+NYPD$hours <- rep(NA,nrow(NYPD))
+for (i in 1:nrow(NYPD)) {
+  NYPD$hours[i] <- str_split(NYPD$OCCUR_TIME[i],":")[[1]][1]
+}
+NYPD$hours <- factor(NYPD$hours,levels = c(0:23),ordered = TRUE)
+
+ggplot(NYPD,aes(x=hours))+geom_bar()+
+  ylab("Shooting crime counts")+xlab("Hours in one day")
+```
+<center><p> Plot 13: Barplot of Hours in One day vs Shooting Crime Counts(Group 9,2021).</p></center><br />
+It can be seen from the figure that there are the fewest incidents of shooting in the morning, but more incidents of shooting happend after dark, especially in the midnight.
+
+2. Age and gender distribution of shooting offenders.
+
+Count the shooting cases according to the PERP_AGE_GROUP and PERP_SEX variables, and then visualize the statistical results.
+```{r}
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "1020"] <- "25-44"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "224"] <- "25-44"
+NYPD$PERP_AGE_GROUP[NYPD$PERP_AGE_GROUP == "940"] <- "25-44"
+
+res <- aggregate(NYPD$INCIDENT_KEY,list(NYPD$PERP_AGE_GROUP,NYPD$PERP_SEX),FUN=length)
+colnames(res) <- c("Age group","Gender","Counts")
+res <- res[-1,]
+library(ggplot2)
+ggplot(res,aes(x=`Age group`,y=Counts,fill=Gender))+
+  geom_bar(position=position_dodge(), stat="identity",
+           colour="black")
+```
+<center><p> Plot 14: Barplot of Age and its frequency of shooting of different Genders(Group 9,2021).</p></center><br />
+It can be seen from the figure that most of the offenders are young and middle-aged (Year < 44), and most of offenders are men.
+
+<b><p style = "font-size: 20px;  border-style: solid; border-color: black; padding-left: 10px;">Exploratory Data Analysis: Chapter 3</p></b>
+
+<p>First, we want to do a preliminary (Exploratory Data Analysis - EDA) analysis. Based on this question 3, we want to use these variables in the EDA: VIC_RACE (victims’ races), VIC_AGE_GROUP (victims’ age group), VIC_SEX (victims’ sex), and OCCUR_TIME (occur time of shooting).<br>
+For convenience, we convert the OCCUR_TIME to OCCUR_HOUR, which only shows the hour of the occur time.<br>
+We also create dummy variables for VIC_RACE, VIC_AGE_GROUP, and VIC_SEX. Since we want to try linear regression in this question.
+</p>
+```{r}
+NYPD1 <- read_csv("NYPD_Shooting_Incident_Data__Historic_.csv", 
+                 col_types = cols(OCCUR_TIME = col_time(format = "%H:%M:%S")))
+NYPD_1=dummy_cols(NYPD1, select_columns = c('VIC_RACE', 'VIC_AGE_GROUP','VIC_SEX'))
+OCCUR_HOUR = hour(NYPD1$OCCUR_TIME)
+NYPD1$OCCUR_HOUR=OCCUR_HOUR
+```
+<p>For EDA, we can first see the describe statistics for OCCUR_HOUR.</p>
+```{r}
+describe(NYPD1$OCCUR_HOUR)
+```
+<p>According to the data, we can get the mean of OCCUR_HOUR is 12.06, which means around 12:00 a.m or p.m. We use a.m or p.m here is because time is special to calculate. For example, if we have two shooting cases one happened on 1:00 and the other one happened on 23:00. If we just calculate its average by using their sum divided by 2, we will get 12:00, not the true average time which should be the midnight. Therefore, we use a.m or p.m to express our time.
+<br>
+For categorical variables VIC_RACE, VIC_AGE_GROUP, and VIC_SEX, we can get</p>
+```{r}
+table(NYPD1$VIC_RACE)
+```
+```{r}
+par(mai=c(1,2,1,1))
+
+barplot(table(NYPD1$VIC_RACE),cex.axis= 1,las=1,col=cm.colors(7),
+        cex.names = 0.6,main="Victims Counts Per Race",
+        horiz = TRUE)
+```
+<center><p> Plot 15: Barplot of Victim's Race(Group 9,2021).</p></center><br />
+From this bar plot we can observee that:
+<ul>
+<li>There are 9 victims are AMERICAN INDIAN/ALASKAN NATIVE</li>
+<li>There are 93 victims are ASIAN</li>
+<li>There are 286 victims are ASIAN / PACIFIC ISLANDER</li>
+<li>There are 15470 victims are BLACK</li>
+<li>There are 2085 victims are BLACK HISPANIC</li>
+<li>There are 578 victims are WHITE</li>
+<li>There are 3105 victims are WHITE HISPANIC</li>
+</ul>
+```{r}
+table(NYPD1$VIC_SEX)
+```
+
+```{r}
+par(mai=c(1,1,1,1))
+
+barplot(table(NYPD$VIC_SEX),cex.axis= 1,las=1,col=cm.colors(4),
+        cex.names = 0.6,main="Victims Counts Per Sex",
+        horiz = TRUE)
+```
+<center><p> Plot 16: Barplot ofAge and its frequency of shooting of different Genders(Group 9,2021).</p></center><br />
+<ul>
+<li>There are 1999 victims are female</li>
+<li>There are 19615 victims are male</li> 
+<li>There are 12 victims are either Male or Female</li>
+</ul>
+We can say that the maximum number of victims are Male when compared to Female.
+```{r}
+table(NYPD$VIC_AGE_GROUP)
+```
+
+```{r}
+par(mai=c(1,1,1,1))
+
+barplot(table(NYPD$VIC_AGE_GROUP),cex.axis= 1,las=1,col=cm.colors(7),
+        cex.names = 0.6,main="Victims Counts Per Age Group",
+        horiz = TRUE)
+```
+<center><p> Plot 17: Barplot of Victims Counts per Age Group(Group 9,2021).</p></center><br />
+Here we check for Victim count per age group. They are as follows:
+<ul>
+<li>There are 2449 victims are under 18 years old</li>
+<li>There are 8426 victims are between 18-24 years old</li>
+<li>There are 9228 victims are between 25-44 years old</li>
+<li>There are 1381 victims are between 45-64 years old</li>
+<li>There are 142 victims are above 65+ years old</li>
+</ul>
+<br>
+<br>
+<b>Group 9 Final Project.Rmd File has been attached with this document</b>
